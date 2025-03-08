@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -23,10 +24,18 @@ namespace UnitTestProject2_Class_Practise
 
             IWebDriver driver = new ChromeDriver();
             driver.Manage().Window.Maximize();
+
             driver.Url = "https://adactinhotelapp.com/";
+            
             driver.FindElement(By.Id("username")).SendKeys("Nabeel0075");
             driver.FindElement(By.Name("password")).SendKeys("NabeelTester123");
             driver.FindElement(By.ClassName("login_button")).Click();
+
+            string message=driver.FindElement(By.ClassName("welcome_menu")).Text;
+            Assert.AreEqual("Welcome to Adactin Group of Hotels", message);
+
+            driver.FindElement(By.Id("location")).SendKeys("Sydney");
+            Thread.Sleep(3000);
 
             driver.Close();
 
@@ -43,6 +52,20 @@ namespace UnitTestProject2_Class_Practise
         [TestCategory("BAT"), TestCategory("Critical"), TestCategory("Positive")]
         public void TestCase_002()
         {
+
+            IWebDriver driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
+
+            driver.Url = "https://adactinhotelapp.com/";
+
+            driver.FindElement(By.Id("username")).SendKeys("Nabeel0075");
+            driver.FindElement(By.Name("password")).SendKeys("invalidpassword");
+            driver.FindElement(By.ClassName("login_button")).Click();
+
+            string message = driver.FindElement(By.ClassName("auth_error")).Text;
+            Assert.AreEqual("Invalid Login details or Your Password might have expired. Click here to reset your password", message);
+
+            driver.Close();
 
         }
     }
